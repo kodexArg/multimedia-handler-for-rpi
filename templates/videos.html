@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">video title</th>
+        <th scope="col">frame</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>test frame</td>
+        <td><img src="{{ url_for('videos', filename='minitest.png') }}"/></td>
+      </tr>
+    </tbody>
+  </table>
+{% endblock %}
