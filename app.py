@@ -17,22 +17,35 @@ def home():
 
 @app.route('/vid')
 def videos():
-    return render_template('videos.html', vids=video_list_as_json())
+    return render_template('videos.html', all_content=video_list_as_json())
 
 
 # Functions
 def video_list_as_json():
-    all_videos = []
+    """
+    Construct a nested dict for each device (raspberry pi) and their videos with the following structure:
+
+    [RPI_201:{
+        1:{src:source path,tag:filename},
+        2:{src:source path,tag:filename}
+    },
+    RPI_202:{
+        1:{...}}]
+    """
+
+    rpi = {}
     for folder in os.listdir(root_videos_dir):
-        # each folder should indetify a Raspberry Pi
         video_path = os.path.join(root_videos_dir, folder)
-        rpi_vids = {}
+        position = 0
+        rpi_id = {}
+        rpi_vid = {}
         for video in os.listdir(video_path):
-            rpi_vids['device'] = folder
-            rpi_vids['tag'] = video.split(sep='.')[0]
-            rpi_vids['src'] = "/".join(['videos', folder, video])
-            all_videos.append(rpi_vids)
-    return all_videos
+            position += 1
+            rpi_vid['tag'] = video.split(sep='.')[0]
+            rpi_vid['src'] = "/".join(['videos', folder, video])
+            rpi_id[position] = rpi_vid
+        rpi[folder] = rpi_id
+    return rpi
 
 
 if __name__ == "__main__":

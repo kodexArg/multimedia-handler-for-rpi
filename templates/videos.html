@@ -4,24 +4,34 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">video title</th>
-      <th scope="col">frame</th>
+      <th scope="col">Device</th>
+      <th scope="col">Content</th>
     </tr>
   </thead>
   <tbody>
-    {% for vid in vids %}
+    {% for device in all_content %}
     <tr>
-      <th scope="row">{{ vid.device }}</th>
-      <td>{{ vid.tag }} filename='{{ vid.src }}'</td>
+      <th scope="row">{{ device }}</th>
       <td>
-        <video autoplay="autoplay" controls="controls" preload="preload" width="320" height="240">
-          <source src="{{ url_for('static', filename='/' + vid.src)}}" />
-        </video>
+        {% for id in all_content[device] %}
+        <div class="card mb-3" style="width: 22rem;">
+          <div class="card-header">
+            <h5 class="card-title"><b>{{ id }}</b> {{ all_content[device][id].tag }}</h5>
+          </div>
+          <video controls="controls" preload="preload" loop="True" muted="True">
+            <source src="{{ url_for('static', filename='/' + all_content[device][id].src) }}" />
+          </video>
+          <div class="small text-muted mx-auto">{{ all_content[device][id].src }}</div>
+          <div class="card-footer">
+            <div class="btn btn-primary btn-small">copy</div>
+            <div class="btn btn-warning btn-small">delete</div>
+            <div class="btn btn-danger btn-small">delete all</div>
+          </div>
+        </div>
+        {% endfor %}
       </td>
     </tr>
     {% endfor %}
   </tbody>
-
 </table>
 {% endblock %}

@@ -1,0 +1,23 @@
+      <td>
+        <video autoplay="autoplay" controls="controls" preload="preload" width="320" height="240">
+          <source src="{{ url_for('static', filename='/' + vid.src)}}" />
+        </video>
+      </td>
+
+
+
+              <div class="card" style="width: 22rem;">
+                <div class="card-header">
+                  <h5 class="card-title">{{ all_content[device][id].tag }}</h5>
+                </div>
+                <video controls="controls" preload="preload" loop="True" muted="True">
+                  <source src="{{ url_for('static', filename='/' + all_content[device][id].src) }}" />
+                </video>
+                <div class="small">source: {{ all_content[device][id].src }}</div>
+                <div>
+                  <div class="btn btn-primary btn-small">copy</div>
+                  <div class="btn btn-warning btn-small">delete</div>
+                  <div class="btn btn-danger btn-small">delete all</div>
+                </div>
+              </div>
+ 
