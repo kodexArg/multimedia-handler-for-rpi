@@ -2,19 +2,26 @@
 
 {% block content %}
 <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">video title</th>
-        <th scope="col">frame</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>test frame</td>
-        <td><img src="{{ url_for('videos', filename='minitest.png') }}"/></td>
-      </tr>
-    </tbody>
-  </table>
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">video title</th>
+      <th scope="col">frame</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for vid in vids %}
+    <tr>
+      <th scope="row">{{ vid.device }}</th>
+      <td>{{ vid.tag }} filename='{{ vid.src }}'</td>
+      <td>
+        <video autoplay="autoplay" controls="controls" preload="preload" width="320" height="240">
+          <source src="{{ url_for('static', filename='/' + vid.src)}}" />
+        </video>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+
+</table>
 {% endblock %}
