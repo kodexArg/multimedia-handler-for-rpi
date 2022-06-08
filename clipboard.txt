@@ -20,4 +20,45 @@
                   <div class="btn btn-danger btn-small">delete all</div>
                 </div>
               </div>
- 
+
+
+{% extends "base.html" %}
+
+{% block content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Device</th>
+      <th scope="col">Content</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for device in all_content %}
+    <tr>
+      <th scope="row">{{ device }}</th>
+      <td>
+        {% for id in all_content[device] %}
+        <div class="d-flex">
+          <div class="flex-shrink-0">
+            <div class="card mb-3" style="width: 20rem;">
+              <div class="card-header">
+                <h5 class="card-title"><b>{{ id }}</b> {{ all_content[device][id].tag }}</h5>
+              </div>
+              <video controls="controls" loop="True" muted="True" width="320" height="240">
+                <source src="{{ url_for('static', filename='/' + all_content[device][id].src) }}" />
+              </video>
+              <div class="small text-muted mx-auto">source:{{ all_content[device][id].src }}</div>
+              <div class="card-footer">
+                <div class="btn btn-primary btn-small">copy</div>
+                <div class="btn btn-warning btn-small">delete</div>
+                <div class="btn btn-danger btn-small">delete all</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
