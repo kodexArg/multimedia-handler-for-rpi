@@ -38,9 +38,9 @@ def video_list_as_json():
         video_path = os.path.join(root_videos_dir, folder)
         position = 0
         rpi_id = {}
-        rpi_vid = {}
-        for video in os.listdir(video_path):
+        for video in os.listdir(video_path):    
             position += 1
+            rpi_vid = {}
             rpi_vid['tag'] = video.split(sep='.')[0]
             rpi_vid['src'] = "/".join(['videos', folder, video])
             rpi_id[position] = rpi_vid

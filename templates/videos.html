@@ -18,10 +18,10 @@
           <div class="card-header">
             <h5 class="card-title"><b>{{ id }}</b> {{ all_content[device][id].tag }}</h5>
           </div>
-          <video controls="controls" preload="preload" loop="True" muted="True">
+          <video controls="controls" loop="True" muted="True">
             <source src="{{ url_for('static', filename='/' + all_content[device][id].src) }}" />
           </video>
-          <div class="small text-muted mx-auto">{{ all_content[device][id].src }}</div>
+          <div class="small text-muted mx-auto">source:{{ all_content[device][id].src }}</div>
           <div class="card-footer">
             <div class="btn btn-primary btn-small">copy</div>
             <div class="btn btn-warning btn-small">delete</div>
