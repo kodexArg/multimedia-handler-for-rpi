@@ -2,7 +2,7 @@ from crypt import methods
 from logging import root
 import os
 
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from werkzeug.utils import secure_filename
@@ -23,6 +23,11 @@ class Converter(FlaskForm):
 # Routes
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    if request.method == 'POST':
+        content = {
+            'request': request
+        }
+        return render_template('home.html', **content)
     return render_template('home.html')
 
 
@@ -33,7 +38,7 @@ def converter():
 
     if form.validate_on_submit():
         filename = secure_filename(form.file.data.filename)
-        form.file.data.save('converter/' + filename)
+        form.file.data.save('static/converter/' + filename)
         return redirect(url_for('home'))
 
     return render_template('converter.html', form=form)
@@ -42,7 +47,7 @@ def converter():
 @app.route('/vid')
 def videos():
     content = {
-        "all_devices": video_list_as_json()
+        'all_devices': video_list_as_json()
     }
     return render_template('videos.html', **content)
 
@@ -77,6 +82,6 @@ def video_list_as_json():
     return rpi
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.debug = True
     app.run()
