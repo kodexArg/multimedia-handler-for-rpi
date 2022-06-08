@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <p>hi</p>
+<div class="container">
+    <a class="btn btn-primary" href="{{ url_for('videos') }}">Videos...</a>
+    <a class="btn btn-primary" href="{{ url_for('converter') }}">Converter...</a>
+</div>
 {% endblock %}

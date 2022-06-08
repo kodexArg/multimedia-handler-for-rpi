@@ -9,27 +9,34 @@
     </tr>
   </thead>
   <tbody>
-    {% for device in all_content %}
+    {% for device in all_devices %}
     <tr>
-      <th scope="row">{{ device }}</th>
+      <th scope="row">
+        {{ device }}
+      </th>
       <td>
         <div class="card-group">
-        {% for id in all_content[device] %}
-          <div class="card mx-3 mb-5" style="max-width: 20rem; min-width: 20rem;">
-            <div class="card-header">
-              <h5 class="card-title"><b>{{ id }}</b> {{ all_content[device][id].tag }}</h5>
-            </div>
-            <video controls="controls" loop="True" muted="True">
-              <source src="{{ url_for('static', filename='/' + all_content[device][id].src) }}" />
-            </video>
-            <div class="small text-muted mx-auto">source:{{ all_content[device][id].src }}</div>
-            <div class="card-footer">
-              <div class="btn btn-primary btn-small">copy</div>
-              <div class="btn btn-warning btn-small">delete</div>
-              <div class="btn btn-danger btn-small">delete all</div>
+          {% for id in all_devices[device] %}
+          <div class="row mt-0 mb-4">
+            <div class="col mx-3">
+              <div class="card" style="width: 18rem;">
+                <div class="card-header">
+                  <h5 class="card-title"><b>{{ id }}</b> {{ all_devices[device][id].tag }}</h5>
+                </div>
+                <video style="height: 10rem; width: 17.9rem;" controls="controls" preload="none" loop="True"
+                  muted="True">
+                  <source src="{{ url_for('static', filename='/' + all_devices[device][id].src) }}" />
+                </video>
+                <div class="small text-muted mt-auto">{{ all_devices[device][id].src }}</div>
+                <div class="card-footer">
+                  <div class="btn btn-primary btn-small">copy</div>
+                  <div class="btn btn-warning btn-small">delete</div>
+                  <div class="btn btn-danger btn-small">delete all</div>
+                </div>
+              </div>
             </div>
           </div>
-        {% endfor %}
+          {% endfor %}
         </div>
       </td>
     </tr>
