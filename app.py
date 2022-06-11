@@ -1,33 +1,42 @@
-from crypt import methods
-from logging import root
+import imp
 import os
 
 from flask import Flask, render_template, redirect, url_for, request
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField
+from wtforms import SubmitField, FileField, IntegerField, SelectMultipleField, widgets
+from wtforms.validators import DataRequired
 from werkzeug.utils import secure_filename
-
 
 from folders import VIDEOS_PATH as root_videos_dir
 
-
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'Super Secure Password (not really...)'
 
 
 # Forms
+class CheckboxMultipleField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
+
 class Converter(FlaskForm):
-    file = FileField()
+    file = FileField(
+        'Elija la imagen JPG para convertir',
+        validators=[DataRequired('Obligatorio')]
+    )
+    lenght = IntegerField(
+        'Indique la duración en segundos',
+        validators=[DataRequired('Obligatorio')]
+    )
+    folders = CheckboxMultipleField(
+        'Copiar a los siguientes dispositivos (selecciones individuales con tecla Ctrl)',
+        choices=os.listdir(root_videos_dir)
+    )
+    submit = SubmitField('Subir y procesar')
 
 
 # Routes
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def home():
-    if request.method == 'POST':
-        content = {
-            'request': request
-        }
-        return render_template('home.html', **content)
     return render_template('home.html')
 
 
@@ -35,13 +44,19 @@ def home():
 def converter():
     """ converts a JPG into a MP4 movie that last a setted time """
     form = Converter()
+    folders = os.listdir(root_videos_dir)
+
+    content = {
+        'form': form,
+        'folders': folders,
+    }
 
     if form.validate_on_submit():
         filename = secure_filename(form.file.data.filename)
         form.file.data.save('static/converter/' + filename)
-        return redirect(url_for('home'))
+        content['response'] = request
 
-    return render_template('converter.html', form=form)
+    return render_template('converter.html', **content)
 
 
 @app.route('/vid')
@@ -84,4 +99,5 @@ def video_list_as_json():
 
 if __name__ == '__main__':
     app.debug = True
+    app.config['SECRET_KEY'] = 'Super Secure Password (not really...)'
     app.run()

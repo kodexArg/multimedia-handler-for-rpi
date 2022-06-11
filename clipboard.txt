@@ -62,3 +62,23 @@
     {% endfor %}
   </tbody>
 </table>
+
+
+    <form action="{{url_for('converter')}}" method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    {{ form }}
+    <input class="btn btn-primary" type="submit">
+   </form>
+
+
+    "html.autoClosingTags": true,
+    "html.suggest.html5": true,
+    "editor.linkedEditing": true,
+    "[html]": {
+        "editor.foldingStrategy": "indentation",
+        "editor.suggest.insertMode": "replace",
+        "editor.autoIndent": "brackets",
+        "editor.acceptSuggestionOnCommitCharacter": true
+
+    },
+    "python.linting.pylintArgs": ["--max-line-length=120"],
