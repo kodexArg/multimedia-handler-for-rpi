@@ -3,19 +3,37 @@
 {% block content %}
 
 <div class="container">
-    <div class="form-group">
-        <form  action="{{url_for('converter')}}" method="POST" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
-            {{ form.file.label(class="form-text text-muted") }}
-            {{ form.file(class="form-control") }}
-            {{ form.lenght.label(class="form-text text-muted") }}
-            {{ form.lenght(min=0, max=180, value=30, class="form-control slider") }}
-            {{ form.folders.label }}
-            {{ form.folders }}
-            <br>
-            {{ form.submit(class="btn btn-primary") }}
-        </form>
-    </div>
+    <form class="form form-horizontal" role="form" action="{{url_for('converter')}}" method="POST"
+        enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="row mb-3">
+            <div class="col">
+                {{ form.file.label(class="form-label") }}
+                {{ form.file(class="form-control form-control-file") }}
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-9">
+                {{ form.filename.label(class="form-label") }}
+                {{ form.filename(class="form-control") }}
+            </div>
+            <div class="col-3">
+                {{ form.lenght.label(class="form-label") }}
+                {{ form.lenght(min=0, max=180, value=30, class="form-control") }}
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+
+                {{ form.folders.label }}
+                {{ form.folders }}
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">{{ form.submit(class="btn btn-primary") }}</div>
+        </div>
+
+    </form>
 </div>
 
 <br>

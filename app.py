@@ -1,37 +1,13 @@
-import imp
 import os
+import shutil
 
-from flask import Flask, render_template, redirect, url_for, request
-from flask_wtf import FlaskForm
-from wtforms import SubmitField, FileField, IntegerField, SelectMultipleField, widgets
-from wtforms.validators import DataRequired
+from flask import Flask, render_template
 from werkzeug.utils import secure_filename
 
-from folders import VIDEOS_PATH as root_videos_dir
+from forms import Converter
+from utils import ffmpeg, STATIC_PATH, VIDEOS_PATH, BASE_PATH, CONVERTER_PATH
 
 app = Flask(__name__)
-
-
-# Forms
-class CheckboxMultipleField(SelectMultipleField):
-    widget = widgets.ListWidget(prefix_label=False)
-    option_widget = widgets.CheckboxInput()
-
-
-class Converter(FlaskForm):
-    file = FileField(
-        'Elija la imagen JPG para convertir',
-        validators=[DataRequired('Obligatorio')]
-    )
-    lenght = IntegerField(
-        'Indique la duración en segundos',
-        validators=[DataRequired('Obligatorio')]
-    )
-    folders = CheckboxMultipleField(
-        'Copiar a los siguientes dispositivos (selecciones individuales con tecla Ctrl)',
-        choices=os.listdir(root_videos_dir)
-    )
-    submit = SubmitField('Subir y procesar')
 
 
 # Routes
@@ -42,19 +18,24 @@ def home():
 
 @app.route('/converter', methods=['GET', 'POST'])
 def converter():
-    """ converts a JPG into a MP4 movie that last a setted time """
+    """ converts a JPG into a MP4 movie that last x seconds """
     form = Converter()
-    folders = os.listdir(root_videos_dir)
-
+    folders = os.listdir(VIDEOS_PATH)
     content = {
         'form': form,
         'folders': folders,
     }
 
     if form.validate_on_submit():
-        filename = secure_filename(form.file.data.filename)
-        form.file.data.save('static/converter/' + filename)
-        content['response'] = request
+        input_filename = secure_filename(form.file.data.filename)
+        form.file.data.save(os.path.join(CONVERTER_PATH, input_filename))
+        print(f"Filename {input_filename} saved.")
+
+        output_filename = form.filename.data
+        lenght = form.lenght.data
+        folders = form.folders.data
+
+        ffmpeg_convertion(input_filename, output_filename, lenght, folders)
 
     return render_template('converter.html', **content)
 
@@ -68,6 +49,28 @@ def videos():
 
 
 # Functions
+def ffmpeg_convertion(input_filename, output_filename, lenght_in_seconds, folders):
+
+    if len(output_filename.split('.')) == 1:
+        output_filename += ".mp4"
+
+    input_file = os.path.join(CONVERTER_PATH, input_filename)
+    output_file = os.path.join(CONVERTER_PATH, output_filename)
+
+    # create video file, this subprocess takes a while depending on image size and time lenght
+    ffmpeg(input_file, output_file, lenght_in_seconds)
+
+    # copying video to device folders selected in form
+    for folder in folders:
+        print(f"Coping video to {folder}...")
+        shutil.copy(output_file, os.path.join(VIDEOS_PATH, folder))
+
+    # finally moving image and video to 'processed' folder.
+    print(f"Moving {input_filename} and {output_file} to {CONVERTER_PATH}/processed")
+    shutil.move(input_file, CONVERTER_PATH / 'processed')
+    shutil.move(output_file, CONVERTER_PATH / 'processed')
+
+
 def video_list_as_json():
     """
     Construct a nested dict for each device (raspberry pi) and their videos with the following structure:
@@ -81,8 +84,8 @@ def video_list_as_json():
     """
 
     rpi = {}
-    for folder in os.listdir(root_videos_dir):
-        video_path = os.path.join(root_videos_dir, folder)
+    for folder in os.listdir(VIDEOS_PATH):
+        video_path = os.path.join(VIDEOS_PATH, folder)
         position = 0
         rpi_id = {}
         if os.path.isdir(video_path):
