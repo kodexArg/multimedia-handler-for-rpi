@@ -19,7 +19,7 @@ class Converter(FlaskForm):
         validators=[DataRequired('Obligatorio')]
     )
     filename = StringField(
-        'Archivo de salida (sin extensión)',
+        'Nombre del video',
         validators=[DataRequired('Obligatorio')]
     )
     lenght = IntegerField(

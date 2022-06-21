@@ -5,7 +5,7 @@ from flask import Flask, render_template
 from werkzeug.utils import secure_filename
 
 from forms import Converter
-from utils import ffmpeg, STATIC_PATH, VIDEOS_PATH, BASE_PATH, CONVERTER_PATH
+from utils import ffmpeg, VIDEOS_PATH, CONVERTER_PATH
 
 app = Flask(__name__)
 
@@ -27,11 +27,18 @@ def converter():
     }
 
     if form.validate_on_submit():
+        #input file, save and get filename: 
         input_filename = secure_filename(form.file.data.filename)
         form.file.data.save(os.path.join(CONVERTER_PATH, input_filename))
         print(f"Filename {input_filename} saved.")
 
+        # output file naming:
         output_filename = form.filename.data
+        if len(output_filename.split('.')) == 1:
+            output_filename += ".mp4"
+        output_filename = output_filename.replace(' ', '_').replace('-', '_')
+        print(f'Output Filename: {output_filename}')
+
         lenght = form.lenght.data
         folders = form.folders.data
 
@@ -51,9 +58,6 @@ def videos():
 # Functions
 def ffmpeg_convertion(input_filename, output_filename, lenght_in_seconds, folders):
 
-    if len(output_filename.split('.')) == 1:
-        output_filename += ".mp4"
-
     input_file = os.path.join(CONVERTER_PATH, input_filename)
     output_file = os.path.join(CONVERTER_PATH, output_filename)
 
@@ -66,7 +70,8 @@ def ffmpeg_convertion(input_filename, output_filename, lenght_in_seconds, folder
         shutil.copy(output_file, os.path.join(VIDEOS_PATH, folder))
 
     # finally moving image and video to 'processed' folder.
-    print(f"Moving {input_filename} and {output_file} to {CONVERTER_PATH}/processed")
+    print(
+        f"Moving {input_filename} and {output_filename} to {CONVERTER_PATH}/processed")
     shutil.move(input_file, CONVERTER_PATH / 'processed')
     shutil.move(output_file, CONVERTER_PATH / 'processed')
 

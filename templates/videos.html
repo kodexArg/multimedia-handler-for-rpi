@@ -23,7 +23,7 @@
                 <div class="card-header">
                   <h5 class="card-title"><b>{{ id }}</b> {{ all_devices[device][id].tag }}</h5>
                 </div>
-                <video style="height: 10rem; width: 17.9rem;" controls="controls" preload="none" loop="True"
+                <video style="height: 10rem; width: 17.9rem;" controls="controls" preload="auto" loop="True"
                   muted="True">
                   <source src="{{ url_for('static', filename='/' + all_devices[device][id].src) }}" />
                 </video>

@@ -1,9 +1,8 @@
 {% extends "base.html" %}
-0
 {% block content %}
 
 <div class="container">
-    <form class="form form-horizontal" role="form" action="{{url_for('converter')}}" method="POST"
+    <form class="form form-horizontal" role="form" action="{{url_for('home')}}" method="POST"
         enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <div class="row mb-3">
@@ -19,7 +18,7 @@
             </div>
             <div class="col-3">
                 {{ form.lenght.label(class="form-label") }}
-                {{ form.lenght(min=0, max=180, value=30, class="form-control") }}
+                {{ form.lenght(min=0, max=180, value=15, class="form-control") }}
             </div>
         </div>
         <div class="row mb-3">
@@ -49,4 +48,8 @@
     {% endif %}
 </div>
 
+{% endblock %}
+
+{% block footer %}
+<div class="bg-warning">Attention: converting a video may take a while, please be patient</div>
 {% endblock %}
