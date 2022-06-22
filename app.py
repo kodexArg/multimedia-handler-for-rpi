@@ -1,7 +1,7 @@
 import os
 import shutil
 
-from flask import Flask, render_template
+from flask import Flask, redirect, render_template, flash, url_for
 from werkzeug.utils import secure_filename
 
 from forms import Converter
@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 
 # Routes
-@app.route('/', methods=['GET'])
+@app.route('/')
 def home():
     return render_template('home.html')
 
@@ -27,23 +27,25 @@ def converter():
     }
 
     if form.validate_on_submit():
-        #input file, save and get filename: 
+        # input filename and save:
         input_filename = secure_filename(form.file.data.filename)
         form.file.data.save(os.path.join(CONVERTER_PATH, input_filename))
-        print(f"Filename {input_filename} saved.")
 
         # output file naming:
         output_filename = form.filename.data
+        if output_filename == '':
+            output_filename = input_filename.replace('.', '_')
         if len(output_filename.split('.')) == 1:
             output_filename += ".mp4"
         output_filename = output_filename.replace(' ', '_').replace('-', '_')
-        print(f'Output Filename: {output_filename}')
 
         lenght = form.lenght.data
         folders = form.folders.data
 
         ffmpeg_convertion(input_filename, output_filename, lenght, folders)
+        flash('Proceso finalizado sin errores', 'alert-info')
 
+        return redirect(url_for('converter'))
     return render_template('converter.html', **content)
 
 
@@ -72,9 +74,11 @@ def ffmpeg_convertion(input_filename, output_filename, lenght_in_seconds, folder
     # finally moving image and video to 'processed' folder.
     print(
         f"Moving {input_filename} and {output_filename} to {CONVERTER_PATH}/processed")
-    shutil.move(input_file, CONVERTER_PATH / 'processed')
-    shutil.move(output_file, CONVERTER_PATH / 'processed')
-
+    shutil.copy2(input_file, CONVERTER_PATH / 'processed')
+    shutil.copy2(output_file, CONVERTER_PATH / 'processed')
+    os.remove(input_file)
+    os.remove(output_file)
+    
 
 def video_list_as_json():
     """

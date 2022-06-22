@@ -1,6 +1,6 @@
 #Ignore Folders
-videos/
-converter/
+videos/*
+converter/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

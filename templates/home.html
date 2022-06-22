@@ -1,4 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="container">
+    <h2>Inicio</h2>
+    <div class="row mb-3">
+        <div class="col">
+            <p>
+            <h4>Bienvenido!</h4>
+            </p>
+            <p>
+                Desde este sitio podrá controlar su flota de dispositivos multimedia
+                Raspberry Pi.
+            </p>
+            <p>
+                Puede comenzar inmediatamente a agregando imágenes como videos estáticos desde la utilidad <a
+                    href="{{ url_for('converter') }}" class="text-link">Converter</a>
+            </p>
+            <p>
+                Desde la sección <a href="{{ url_for('videos') }}" class="text-link">Videos en dispositivos</a> podrás
+                <i>copiar, mover</i> y <i>eliminar</i>, es decir reorganizar los videos en los dispositivos habilitados.
+            </p>
+            <p>
+                Recuerda que cada dispositivo de cartelería busca sincronizar sus videos cada equis minutos (usualmente
+                5'), por lo que es necesario que esperes como mínimo ese tiempo para que la cartelería comience a
+                reproducir un nuevo video cargado, o elimine el clip seleccionado.
+            </p>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

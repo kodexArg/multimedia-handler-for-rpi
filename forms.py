@@ -1,7 +1,7 @@
 import os
 
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, StringField, FileField, IntegerField, SelectMultipleField, widgets
+from wtforms import SubmitField, StringField, FileField, IntegerField, SelectMultipleField, BooleanField, widgets
 from wtforms.validators import DataRequired
 
 from utils import VIDEOS_PATH
@@ -18,10 +18,8 @@ class Converter(FlaskForm):
         'Imagen a convertir',
         validators=[DataRequired('Obligatorio')]
     )
-    filename = StringField(
-        'Nombre del video',
-        validators=[DataRequired('Obligatorio')]
-    )
+    filename = StringField('Nombre del video (opcional)')
+    orientation = BooleanField('Orientado Vertical?')
     lenght = IntegerField(
         'Duración',
         validators=[DataRequired('Obligatorio')]
@@ -30,4 +28,4 @@ class Converter(FlaskForm):
         'Copiar a',
         choices=os.listdir(VIDEOS_PATH)
     )
-    submit = SubmitField('Subir y procesar')
+    submit = SubmitField('Convertir')

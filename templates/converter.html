@@ -1,55 +1,72 @@
 {% extends "base.html" %}
-{% block content %}
 
+
+{% block content %}
 <div class="container">
-    <form class="form form-horizontal" role="form" action="{{url_for('home')}}" method="POST"
+    <h2>Converter</h2>
+    <div class="row mb-3">
+        <div class="col">
+            <p>
+                Esta utilidad utiliza ffmpeg para convertir imágenes [png, jpg] a un video mp4 estático, que será copiado a las carpetas de
+                cada dispositivo seleccionado, y por esto comenzará a sincronizarse en los diferentes dispositivos.
+            </p>
+        </div>
+    </div>
+    <form class="form form-horizontal" role="form" action="{{url_for('converter')}}" method="POST"
         enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <div class="row mb-3">
-            <div class="col">
+            <div class="col-6">
                 {{ form.file.label(class="form-label") }}
                 {{ form.file(class="form-control form-control-file") }}
             </div>
         </div>
         <div class="row mb-3">
-            <div class="col-9">
+            <div class="col-5">
                 {{ form.filename.label(class="form-label") }}
                 {{ form.filename(class="form-control") }}
             </div>
-            <div class="col-3">
+            <div class="col-1">
                 {{ form.lenght.label(class="form-label") }}
                 {{ form.lenght(min=0, max=180, value=15, class="form-control") }}
             </div>
         </div>
         <div class="row mb-3">
-            <div class="col">
-
+            <div class="col-6">
+                {{ form.orientation.label(class="form-label") }}
+                {{ form.orientation }}
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-6">
                 {{ form.folders.label }}
                 {{ form.folders }}
             </div>
         </div>
         <div class="row mb-3">
-            <div class="col">{{ form.submit(class="btn btn-primary") }}</div>
+            <div class="col-3">{{ form.submit(class="btn btn-primary btn-lg") }}</div>
+            <div class="col-9">
+                <span class="small text-muted">
+                    <strong>Atención:</strong><br>
+                    <i>La conversión puede tardar varios segundos, dependiendo del tamaño y tiempo del video
+                        generado.</i>
+                </span>
+            </div>
         </div>
-
     </form>
 </div>
-
-<br>
-
-<div class="container">
-    {% if content %}
-    <ul>
-        {% for key, value in content %}
-        <li>{{ key }}, {{ value }}</li>
-
-        {% endfor %}
-    </ul>
-    {% endif %}
-</div>
-
 {% endblock %}
 
 {% block footer %}
-<div class="bg-warning">Attention: converting a video may take a while, please be patient</div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-dismissible {{category}}" role="alert">
+    <i>{{message}}</i>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+    </button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
 {% endblock %}
