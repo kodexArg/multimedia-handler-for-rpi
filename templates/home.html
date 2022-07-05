@@ -2,28 +2,27 @@
 
 {% block content %}
 <div class="container">
-    <h2>Inicio</h2>
     <div class="row mb-3">
         <div class="col">
             <p>
-            <h4>Bienvenido!</h4>
+            <h4>Welcome!</h4>
             </p>
             <p>
-                Desde este sitio podrá controlar su flota de dispositivos multimedia
-                Raspberry Pi.
+                From this site you can control your fleet of multimedia devices
+                RaspberryPi.
             </p>
             <p>
-                Puede comenzar inmediatamente a agregando imágenes como videos estáticos desde la utilidad <a
-                    href="{{ url_for('converter') }}" class="text-link">Converter</a>
+                You can immediately start adding images as static videos from the
+                <a href="{{ url_for('converter') }}" class="text-link">Converter</a>.
             </p>
             <p>
-                Desde la sección <a href="{{ url_for('videos') }}" class="text-link">Videos en dispositivos</a> podrás
-                <i>copiar, mover</i> y <i>eliminar</i>, es decir reorganizar los videos en los dispositivos habilitados.
+                From the <a href="{{ url_for('videos') }}" class="text-link">Videos on devices</a> section you can
+                <i>copy</i> and <i>delete</i>, that is, rearrange the videos on the enabled devices.
             </p>
             <p>
-                Recuerda que cada dispositivo de cartelería busca sincronizar sus videos cada equis minutos (usualmente
-                5'), por lo que es necesario que esperes como mínimo ese tiempo para que la cartelería comience a
-                reproducir un nuevo video cargado, o elimine el clip seleccionado.
+                Remember that each device seeks to synchronize its videos every few minutes (usually
+                5'), so you need to wait at least that long for the Multimedia Signs to start
+                playing a new uploaded video, or stop showing a delete clip.
             </p>
         </div>
     </div>

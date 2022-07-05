@@ -3,12 +3,12 @@
 
 {% block content %}
 <div class="container">
-    <h2>Converter</h2>
     <div class="row mb-3">
         <div class="col">
             <p>
-                Esta utilidad utiliza ffmpeg para convertir imágenes [png, jpg] a un video mp4 estático, que será copiado a las carpetas de
-                cada dispositivo seleccionado, y por esto comenzará a sincronizarse en los diferentes dispositivos.
+                This uses ffmpeg to convert images [png, jpg, ...] to mp4 video, which will be copied to each selected
+                device's folder.
+                It may take up to 5' for a device to check the folder and sync the videos on his private ssd card.
             </p>
         </div>
     </div>
@@ -22,11 +22,11 @@
             </div>
         </div>
         <div class="row mb-3">
-            <div class="col-5">
+            <div class="col-4">
                 {{ form.filename.label(class="form-label") }}
                 {{ form.filename(class="form-control") }}
             </div>
-            <div class="col-1">
+            <div class="col-2">
                 {{ form.lenght.label(class="form-label") }}
                 {{ form.lenght(min=0, max=180, value=15, class="form-control") }}
             </div>
@@ -34,7 +34,7 @@
         <div class="row mb-3">
             <div class="col-6">
                 {{ form.orientation.label(class="form-label") }}
-                {{ form.orientation }}
+                {{ form.orientation(class="form-select") }}
             </div>
         </div>
         <div class="row mb-3">
@@ -48,8 +48,7 @@
             <div class="col-9">
                 <span class="small text-muted">
                     <strong>Atención:</strong><br>
-                    <i>La conversión puede tardar varios segundos, dependiendo del tamaño y tiempo del video
-                        generado.</i>
+                    <i>The conversion may take several seconds, depending on the size and time of the resulting video.</i>
                 </span>
             </div>
         </div>

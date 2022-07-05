@@ -1,4 +1,32 @@
-{% extends "base.html" %}
+{% extends "base.html" %}request
+
+{% macro modal_copy(macroid, src) %}
+<div class="modal fade" tabindex="-1" id="macro_copy_{{ macroid }}" role="dialog"
+  aria-labelledby="title_macro_copy_{{ macroid }}" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="title_macro_copy_{{ macroid }}">Copy video to device's folders</h5>
+      </div>
+      <div class="modal-body">
+        <video style="width: 28rem;" controls="controls" preload="none" loop="True" muted="True">
+          <source src="{{ url_for('static', filename='/' + src) }}" />
+        </video>
+        <div class="small text-muted mt-auto">{{ src }}</div>
+      </div>
+      <div class="modal-footer">
+        <form action="{{ url_for('videos', src=src) }}" method="POST">
+          <input type="hidden" id="action" name="action" value="macro_copy" />
+          <input type="hidden" id="src" name="src" value="{{ src }}" />
+          <input class="btn btn-primary btn-small" type="submit" value="Copy">
+        </form>
+        <button class="btn btn-secondary btn-small" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
 
 {% block content %}
 <table class="table">
@@ -29,7 +57,13 @@
                 </video>
                 <div class="small text-muted mt-auto">{{ all_devices[device][id].src }}</div>
                 <div class="card-footer">
-                  <div class="btn btn-primary btn-small">copy</div>
+                  <button type="button" class="btn btn-primary btn-small" data-bs-toggle="modal"
+                    data-bs-target="#macro_copy_{{ device }}{{ loop.index }}">
+                    copy
+                  </button>
+                  <!--Modal-->
+                  {{ modal_copy(device ~ loop.index, all_devices[device][id].src) }}
+                  <!--EndModal-->
                   <div class="btn btn-warning btn-small">delete</div>
                   <div class="btn btn-danger btn-small">delete all</div>
                 </div>
@@ -43,4 +77,19 @@
     {% endfor %}
   </tbody>
 </table>
+{% endblock %}
+
+
+{% block footer %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-dismissible {{category}}" role="alert">
+  <i>{{message}}</i>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+  </button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
 {% endblock %}
